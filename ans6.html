@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <style>
+        .colorBox {
+            border: 1px solid;
+            width: 200px;
+            height: 200px;
+            margin: 20px;
+        }
+
+        input {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+<script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+    const Color = () => {
+        const [color, setColor] = React.useState('');
+        const [error, setError] = React.useState(false);
+
+        const handleChange = (e) => {
+            const value = e.target.value;
+            const hexPattern = /^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$/;
+
+            if (hexPattern.test(value)) {
+                setError(false);
+                setColor(value);
+            } else {
+                setError(true);
+                setColor('');
+            }
+        };
+
+        return (
+            <>
+                <div>
+                    <label htmlFor="input">Enter HEX Value for color :
+                        <input onChange={handleChange} id="input" type="text" pattern="^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})$" required/>
+                    </label>
+                    <div className="colorBox" style={{ backgroundColor: color }}>
+                    </div>
+                    {error && <div style={{ color: "red" }}>Invalid HEX color code</div>}
+                </div>
+            </>
+        )
+    };
+
+    const App = () => {
+        return (
+            <>
+                <Color />
+            </>
+        )
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+</script>
+
+</html>

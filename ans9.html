@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const Task = ({ task }) => {
+      return (
+        <div>
+          <input type="checkbox" />
+          <input type="text" readOnly value={task}></input>
+        </div>
+      );
+    };
+
+    const App = () => {
+      const [tasks, setTasks] = React.useState([]);
+      const [newTask, setNewTask] = React.useState("");
+
+      const addTask = () => {
+        if (newTask) {
+          setTasks([...tasks, newTask]);
+          setNewTask("");
+        }
+      }
+      const removeTask=()=>{
+        setTasks(tasks.filter(task => !task.completed))
+      }
+
+      return (
+        <div>
+          <h1>Todo List</h1>
+          <input
+            type="text"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            placeholder="Enter your task!"
+          ></input>
+          <button onClick={addTask}>Add Task</button>
+          
+          <div>
+            {tasks.map((task, index) => (
+              <Task key={index} task={task} />
+            ))}
+            
+          </div>
+          
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</html>

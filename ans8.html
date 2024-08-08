@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz App</title>
+    <style>
+        .quizBlock{
+            width: 500px;
+            height: 200px;
+            background-color: rgb(255, 243, 226);
+            margin: auto;
+            border-radius: 10px;
+            
+
+        }
+        .insideBlock{
+            /* background-color: aqua; */
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #a8a5a5;
+            border-radius: 10px;
+           
+        }
+        button{
+            padding: 10px; 
+            font-size: 15px;
+
+        }
+        .question{
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+<script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+    const { useState } = React;
+
+    const quizList = [
+        {
+            Question: "Capital of India.",
+            Options: ["Mumbai", "New Delhi", "Lucknow"],
+            Answer: "New Delhi"
+        },
+        {
+            Question: "Largest planet in the Solar System.",
+            Options: ["Earth", "Jupiter", "Saturn"],
+            Answer: "Jupiter"
+        },
+        {
+            Question: "What is the chemical symbol for Gold?",
+            Options: ["Au", "Ag", "Pb"],
+            Answer: "Au"
+        }
+    ];
+
+    function Options({ options, onAnswer }) {
+        return (
+            <div>
+                {options.map((option, index) => (
+                    <button key={index} onClick={() => onAnswer(option)}>
+                        {option}
+                    </button>
+                ))}
+            </div>
+        );
+    }
+
+    const Quiz = () => {
+        const [questionIndex, setQuestionIndex] = useState(0);
+        const [score, setScore] = useState(0);
+        const [showResult, setShowResult] = useState(false);
+
+        const handleAnswer = (selectedOption) => {
+            if (selectedOption === quizList[questionIndex].Answer) {
+                setScore(score + 1);
+            }
+            if (questionIndex < quizList.length - 1) {
+                setQuestionIndex(questionIndex + 1);
+            } else {
+                setShowResult(true);
+            }
+        };
+
+        return (
+            <div className = "quizBlock">
+                {showResult ? (
+                    <div>
+                        <h1>Quiz Result</h1>
+                        <p>Score: {score}/{quizList.length}</p>
+                        <button onClick={() => {
+                            setShowResult(false);
+                            setQuestionIndex(0);
+                            setScore(0);
+                        }}>
+                            Play Again
+                        </button>
+                    </div>
+                ) : (
+                    <div className="insideBlock">
+                        <h1>Quiz</h1>
+                        <p className="question">{quizList[questionIndex].Question}</p>
+                        <Options
+                            options={quizList[questionIndex].Options}
+                            onAnswer={handleAnswer}
+                        />
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    ReactDOM.render(<Quiz />, document.getElementById('root'));
+</script>
+</html>
